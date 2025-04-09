@@ -1,4 +1,4 @@
-package yool1.ma.authservice.entities;
+package yool1.ma.authservice.Enum;
 
 public enum Ville {
     Casablanca, Agadir, Tinghir, Essaouira

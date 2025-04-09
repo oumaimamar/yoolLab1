@@ -5,11 +5,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import yool1.ma.authservice.Enum.Niveau;
+import yool1.ma.authservice.Enum.Ville;
 import yool1.ma.authservice.entities.*;
 import yool1.ma.authservice.repository.*;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Date;
 
 @SpringBootApplication
@@ -18,24 +19,36 @@ public class AuthServiceApplication {
     public static void main(String[] args) {ConfigurableApplicationContext context = SpringApplication.run(AuthServiceApplication.class, args);}
 
     @Bean
-    CommandLineRunner start(UserRepository userRepository,ApprenantRepository apprenantRepository) {
+    CommandLineRunner start(UserRepository userRepository,ApprenantRepository apprenantRepository,ProfileRepository profileRepository) {
         return args -> {
 
-//            apprenantRepository.save(Apprenant.builder().firstName("Oumy").lastName("Mer").email("oumy@gml.com").phone("000111222").dateInscription(LocalDate.now()).motDePasse("pwd0").role("APPRENANT").niveau(Niveau.AVANCE).build());
+
+            // Create and save user and profile in one transaction
+            User user = User.builder()
+                    .firstName("Oumy")
+                    .lastName("Mer")
+                    .email("oumy@gml.com")
+                    .phone("000111222")
+                    .ville(Ville.Agadir)
+                    .dateInscription(LocalDate.now())
+                    .motDePasse("123456")
+                    .role("APPRENANT")
+                    .build();
 
 
-            // Création et sauvegarde d'un User
-            User user = new User();
-            user.setFirstName("jud");
-            user.setLastName("kaly");
-            user.setEmail("jud.kaly@example.com");
-            user.setPhone("0612345678");
-            user.setVille(Ville.Agadir);
-            user.setDateInscription(LocalDate.now());
-            user.setMotDePasse("password123");
-            user.setRole("APPRENANT");
+            Profile profile = Profile.builder()
+                    .headline("Apprenant profile")
+                    .bio("New learner")
+                    .build();
 
-            userRepository.save(user);
+            // Set the bidirectional relationship
+            profile.setUser(user);
+            user.setProfile(profile); // Add this to your User entity
+
+            // Save just the profile - user will be saved automatically due to cascade
+            profileRepository.save(profile);
+
+
 
 
             // Création et sauvegarde d'un Apprenant
@@ -54,7 +67,14 @@ public class AuthServiceApplication {
             apprenant.setDateDebut(new Date());
             apprenantRepository.save(apprenant);
 
-            // Création et sauvegarde d'un Lauréat
+            System.out.println("Exemples d'utilisateurs créés avec succès !");
+        };
+    }
+}
+
+
+
+// Création et sauvegarde d'un Lauréat
 //            Laureat laureat = new Laureat();
 //            laureat.setFirstName("Marie");
 //            laureat.setLastName("Martin");
@@ -69,7 +89,7 @@ public class AuthServiceApplication {
 //            laureat.setSpecialite("Machine Learning");
 //            laureatRepository.save(laureat);
 
-            // Création et sauvegarde d'un Recruteur
+// Création et sauvegarde d'un Recruteur
 //            Recruteur recruteur = new Recruteur();
 //            recruteur.setFirstName("Pierre");
 //            recruteur.setLastName("Durand");
@@ -84,7 +104,7 @@ public class AuthServiceApplication {
 //            recruteur.setSecteur("Informatique");
 //            recruteurRepository.save(recruteur);
 
-            // Création et sauvegarde d'un Responsable
+// Création et sauvegarde d'un Responsable
 //            Responsable responsable = new Responsable();
 //            responsable.setFirstName("Sophie");
 //            responsable.setLastName("Leroy");
@@ -98,8 +118,3 @@ public class AuthServiceApplication {
 //            responsable.setFonction("Directrice pédagogique");
 //            responsable.setDepartement("Informatique");
 //            responsableRepository.save(responsable);
-
-            System.out.println("Exemples d'utilisateurs créés avec succès !");
-        };
-    }
-}

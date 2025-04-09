@@ -27,15 +27,6 @@ public class RegisterRestController {
         this.registerService = registerService;
     }
 
-    @GetMapping(path = "/users")
-    public List<User> AllClubs() {
-        return userRepository.findAll();
-    }
-
-
-
-
-    //---------------------------------------------------------------------------------------
 
     @PostMapping(path = "/newUser")
     public ResponseEntity<User> createUser(@RequestBody UserDTO userDTO) {

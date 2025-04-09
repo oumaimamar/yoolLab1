@@ -1,7 +1,7 @@
 package yool1.ma.authservice.dto;
 
 import lombok.Data;
-import yool1.ma.authservice.entities.Ville;
+import yool1.ma.authservice.Enum.Ville;
 
 @Data
 public class UserDTO {

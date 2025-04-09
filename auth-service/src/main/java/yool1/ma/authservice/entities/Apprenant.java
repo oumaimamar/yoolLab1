@@ -1,18 +1,16 @@
 package yool1.ma.authservice.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.PrimaryKeyJoinColumn;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+import yool1.ma.authservice.Enum.Niveau;
 
 import java.util.Date;
 
-@Entity
-@Data @NoArgsConstructor @AllArgsConstructor @Builder
 
+@AllArgsConstructor @NoArgsConstructor @Data @SuperBuilder
+@ToString
+@Entity
 @Table(name = "apprenants")
 @PrimaryKeyJoinColumn(name = "user_id")
 

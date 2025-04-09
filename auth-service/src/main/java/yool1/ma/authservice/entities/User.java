@@ -1,15 +1,16 @@
 package yool1.ma.authservice.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+import yool1.ma.authservice.Enum.Ville;
 
 import java.time.LocalDate;
 
 @Entity
-@Data @NoArgsConstructor @AllArgsConstructor
+@Data @NoArgsConstructor @AllArgsConstructor @SuperBuilder @ToString
 
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -17,7 +18,7 @@ import java.time.LocalDate;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
 
     @Column(nullable = false)
     private String firstName;
@@ -42,5 +43,10 @@ public class User {
 
     @Column(name = "roles")
     private String role;
+
+
+    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Profile profile;
 
 }
