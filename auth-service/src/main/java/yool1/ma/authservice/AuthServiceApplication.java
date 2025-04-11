@@ -38,7 +38,9 @@ public class AuthServiceApplication {
 
             Profile profile = Profile.builder()
                     .headline("Apprenant profile")
-                    .bio("New learner")
+                    .bio("o.s.web.servlet.DispatcherServlet ")
+                    .location("Lot N 150  agadir")
+                    .photoUrl("http://localhost:8021/img/logo.png") // Add default photo
                     .build();
 
             // Set the bidirectional relationship
