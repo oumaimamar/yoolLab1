@@ -1,5 +1,6 @@
 package yool1.ma.authservice.web;
 
+import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import yool1.ma.authservice.dto.UserDTO;
@@ -44,6 +45,19 @@ public class RegisterRestController {
 
         User savedUser = userRepository.save(user);
         return ResponseEntity.ok(savedUser);
+    }
+
+
+    // Delete user and profile --------------------------------------------
+    @DeleteMapping("userAccount/{userId}")
+    @Transactional
+    public ResponseEntity<Object> deleteUser(@PathVariable Long userId) {
+        return userRepository.findById(userId)
+                .map(user -> {
+                    userRepository.delete(user);
+                    return ResponseEntity.noContent().build();
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 
 }

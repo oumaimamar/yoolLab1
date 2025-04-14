@@ -93,7 +93,7 @@ public class ProfileRestController {
 
 
     // Update user profile -----------------------------------------------------
-    @PutMapping("/{userId}/profile")
+    @PutMapping("userAddProfile/{userId}/profile")
     @Transactional
     public ResponseEntity<Profile> updateUserProfile(
             @PathVariable Long userId,
@@ -110,16 +110,6 @@ public class ProfileRestController {
     }
 
 
-    // Delete user and profile --------------------------------------------
-    @DeleteMapping("/{userId}")
-    @Transactional
-    public ResponseEntity<Object> deleteUser(@PathVariable Long userId) {
-        return userRepository.findById(userId)
-                .map(user -> {
-                    userRepository.delete(user);
-                    return ResponseEntity.noContent().build();
-                })
-                .orElse(ResponseEntity.notFound().build());
-    }
+
 
 }
