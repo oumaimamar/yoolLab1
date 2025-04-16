@@ -8,6 +8,7 @@ import lombok.experimental.SuperBuilder;
 import yool1.ma.authservice.Enum.Ville;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data @NoArgsConstructor @AllArgsConstructor @SuperBuilder @ToString
@@ -48,5 +49,11 @@ public class User {
     @OneToOne(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Profile profile;
+
+
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Document> documents;
+
 
 }
