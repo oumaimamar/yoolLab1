@@ -1,36 +1,34 @@
-package yool1.ma.authservice.web;
+package yool1.ma.authservice.services;
 
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import yool1.ma.authservice.dto.UserDTO;
 import yool1.ma.authservice.entities.User;
-import yool1.ma.authservice.repository.ApprenantRepository;
+import yool1.ma.authservice.repository.ProfileRepository;
 import yool1.ma.authservice.repository.UserRepository;
-import yool1.ma.authservice.services.RegisterService;
 
-import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
 
-@RestController
-@CrossOrigin("*")
-public class RegisterRestController {
+@Service
+@Transactional
+public class UserService {
 
     public UserRepository userRepository;
-    public ApprenantRepository apprenantRepository;
-    public RegisterService registerService;
+    public ProfileRepository profileRepository;
 
 
-    public RegisterRestController(ApprenantRepository apprenantRepository, UserRepository userRepository, RegisterService registerService) {
-        this.apprenantRepository = apprenantRepository;
+    public UserService(UserRepository userRepository) {
+
         this.userRepository = userRepository;
-        this.registerService = registerService;
     }
 
-
-    @PostMapping(path = "/newUser")
-    public ResponseEntity<User> createUser(@RequestBody UserDTO userDTO) {
+    //-------------AddNewUser----------------------------------
+    public ResponseEntity<User> addNewUser(UserDTO userDTO) {
         User user = new User();
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
@@ -47,11 +45,8 @@ public class RegisterRestController {
         return ResponseEntity.ok(savedUser);
     }
 
-
-    // Delete user and profile --------------------------------------------
-    @DeleteMapping("userAccount/{userId}")
-    @Transactional
-    public ResponseEntity<Object> deleteUser(@PathVariable Long userId) {
+    //-------------DeleteUser----------------------------------
+    public ResponseEntity<Object> deleteUser(Long userId) {
         return userRepository.findById(userId)
                 .map(user -> {
                     userRepository.delete(user);

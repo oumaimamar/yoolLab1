@@ -20,7 +20,7 @@ public class ProfileService {
         this.profileRepository = profileRepository;
     }
 
- //------------------------------------------------------------
+ //-----------------------AddProfileToUser--------------------------
     public Profile updateUserProfile(Long userId, ProfileUpdateDTO profileUpdateDTO) {
         return userRepository.findById(userId)
                 .map(user -> {
@@ -47,7 +47,6 @@ public class ProfileService {
                 })
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
     }
- //-------------------------------------------------------------------------------
 
 
 
