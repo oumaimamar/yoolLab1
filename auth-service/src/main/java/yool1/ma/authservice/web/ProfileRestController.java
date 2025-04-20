@@ -2,37 +2,18 @@ package yool1.ma.authservice.web;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import yool1.ma.authservice.dto.DocumentDto;
 import yool1.ma.authservice.dto.ProfileUpdateDTO;
 import yool1.ma.authservice.dto.UserProfileDTO;
-import yool1.ma.authservice.entities.Document;
 import yool1.ma.authservice.entities.Profile;
 import yool1.ma.authservice.mapper.UserMapper;
 import yool1.ma.authservice.repository.ApprenantRepository;
-import yool1.ma.authservice.repository.DocumentRepository;
 import yool1.ma.authservice.repository.ProfileRepository;
 import yool1.ma.authservice.repository.UserRepository;
 import yool1.ma.authservice.services.ProfileService;
 
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -41,8 +22,6 @@ public class ProfileRestController {
 
 
     private final UserMapper userMapper;
-    private final DocumentRepository documentRepository;
-
     public UserRepository userRepository;
     public ApprenantRepository apprenantRepository;
     public ProfileRepository profileRepository;
@@ -50,13 +29,12 @@ public class ProfileRestController {
 
 
     public ProfileRestController(UserMapper userMapper, ApprenantRepository apprenantRepository, UserRepository userRepository,
-                                 ProfileRepository profileRepository, ProfileService profileService, DocumentRepository documentRepository) {
+                                 ProfileRepository profileRepository, ProfileService profileService) {
         this.userMapper = userMapper;
         this.apprenantRepository = apprenantRepository;
         this.userRepository = userRepository;
         this.profileRepository = profileRepository;
         this.profileService = profileService;
-        this.documentRepository = documentRepository;
     }
 
 

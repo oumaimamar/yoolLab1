@@ -14,7 +14,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Table(name = "documents")
 public class Document {
-
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String titre;

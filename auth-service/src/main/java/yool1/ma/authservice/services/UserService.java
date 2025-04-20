@@ -3,13 +3,9 @@ package yool1.ma.authservice.services;
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+
 import yool1.ma.authservice.dto.UserDTO;
 import yool1.ma.authservice.entities.User;
-import yool1.ma.authservice.repository.ProfileRepository;
 import yool1.ma.authservice.repository.UserRepository;
 
 import java.time.LocalDate;
@@ -19,11 +15,9 @@ import java.time.LocalDate;
 public class UserService {
 
     public UserRepository userRepository;
-    public ProfileRepository profileRepository;
 
 
     public UserService(UserRepository userRepository) {
-
         this.userRepository = userRepository;
     }
 

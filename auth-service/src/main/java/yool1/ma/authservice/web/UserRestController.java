@@ -8,7 +8,6 @@ import yool1.ma.authservice.entities.User;
 import yool1.ma.authservice.repository.UserRepository;
 import yool1.ma.authservice.services.UserService;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController

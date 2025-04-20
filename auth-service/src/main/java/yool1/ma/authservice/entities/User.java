@@ -7,7 +7,9 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import yool1.ma.authservice.Enum.Ville;
 
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -52,8 +54,11 @@ public class User {
 
 
 
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Document> documents;
 
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Experience> experiences;
 }
