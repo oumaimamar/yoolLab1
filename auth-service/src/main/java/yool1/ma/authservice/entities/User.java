@@ -59,6 +59,7 @@ public class User {
     private List<Document> documents;
 
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Experience> experiences = new ArrayList<>();
 }

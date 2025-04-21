@@ -7,9 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import yool1.ma.authservice.dto.ExperienceDto;
 import yool1.ma.authservice.entities.Experience;
-import yool1.ma.authservice.entities.User;
 import yool1.ma.authservice.repository.ExperienceRepository;
-import yool1.ma.authservice.repository.UserRepository;
 import yool1.ma.authservice.services.ExperienceService;
 
 import java.util.List;
@@ -24,10 +22,13 @@ public class ExperienceRestController {
     private ExperienceRepository experienceRepository;
 
 
+
     @GetMapping(path = "AllExperiences")
     public List<Experience> getAllExperiences() {
         return experienceRepository.findAll();
     }
+
+
 
     @GetMapping("/user/{userId}")
     public List<Experience> getExperiencesByUserId(@PathVariable Long userId) {

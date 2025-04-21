@@ -3,8 +3,10 @@ package yool1.ma.authservice.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import yool1.ma.authservice.Enum.TypeEmploi;
 import yool1.ma.authservice.Enum.Ville;
 
@@ -16,7 +18,6 @@ public class Experience {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String post;
 
     @Enumerated(EnumType.STRING)
@@ -30,7 +31,7 @@ public class Experience {
     private Ville ville;
 
     private String description;
-    @ManyToOne @JoinColumn(name = "user_id")
-    @JsonIgnore  // Add this to break the cycle
+
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 }
