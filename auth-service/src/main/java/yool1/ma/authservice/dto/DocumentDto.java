@@ -12,7 +12,6 @@ public class DocumentDto {
     private TypeDoc typeDoc;
     private Date dateAjout;
     private MultipartFile filePath;
-
-    private User userId;
+    private Long userId; // To associate the experience with a user
 
 }

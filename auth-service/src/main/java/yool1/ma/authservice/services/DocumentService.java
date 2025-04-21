@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -29,6 +30,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -44,14 +46,13 @@ public class DocumentService {
 
 
     //---------------------Add DOCUMENT --------------------
-    public ResponseEntity<Map<String, Object>> addDocument(DocumentDto documentDto,
-                                                           BindingResult result) {
+    public ResponseEntity<?> addDocumentToUser(@Valid DocumentDto documentDto,
+                                               BindingResult result,
+                                               Map<String, Object> response) throws IOException {
 
-        Map<String, Object> response = new HashMap<>();
-
-        // Image Required
+        // Image/Document Required validation
         if (documentDto.getFilePath().isEmpty()) {
-            result.addError(new FieldError("documentDto", "fileName", "The doc file is required"));
+            result.addError(new FieldError("documentDto", "filePath", "The document file is required"));
         }
 
         if (result.hasErrors()) {
@@ -60,10 +61,14 @@ public class DocumentService {
             return ResponseEntity.badRequest().body(response);
         }
 
-        // Save the image file
-        MultipartFile image = documentDto.getFilePath();
+        // Find the user
+        User user = userRepository.findById(documentDto.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Save the document file with timestamp prefix
+        MultipartFile docFile = documentDto.getFilePath();
         Date dateDoc = new Date();
-        String storageFileName = dateDoc.getTime() + ".." + image.getOriginalFilename();
+        String storageFileName = dateDoc.getTime() + "_" + docFile.getOriginalFilename();
 
         try {
             String uploadDir = "public/Doc/";
@@ -72,31 +77,34 @@ public class DocumentService {
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
-            try (InputStream inputStream = image.getInputStream()) {
+
+            try (InputStream inputStream = docFile.getInputStream()) {
                 Files.copy(inputStream, Paths.get(uploadDir + storageFileName),
                         StandardCopyOption.REPLACE_EXISTING);
             }
-        } catch (Exception ex) {
+
+            // Create and save the document
+            Document document = new Document();
+            document.setTitre(documentDto.getTitre());
+            document.setTypeDoc(documentDto.getTypeDoc());
+            document.setDateAjout(dateDoc);
+            document.setFileName(storageFileName);
+            document.setUser(user);
+
+            Document savedDocument = documentRepository.save(document);
+            user.getDocuments().add(savedDocument);
+
+            response.put("status", "success");
+            response.put("document", savedDocument);
+            return ResponseEntity.ok(response);
+
+        } catch (IOException e) {
             response.put("status", "error");
-            response.put("message", "File upload failed");
+            response.put("message", "Failed to store document file");
             return ResponseEntity.internalServerError().body(response);
         }
-
-        // Save Document in Database
-        Document document = new Document();
-        document.setTitre(documentDto.getTitre());
-        document.setTypeDoc(documentDto.getTypeDoc());
-        document.setDateAjout(dateDoc);
-        document.setFileName(storageFileName);
-
-        Document savedDocument = documentRepository.save(document);
-
-        response.put("status", "success");
-        response.put("message", "Document uploaded successfully");
-        response.put("document", savedDocument);
-
-        return ResponseEntity.ok(response);
     }
+
 
 
 //    public ResponseEntity<Map<String, Object>> addDocument(

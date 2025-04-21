@@ -55,8 +55,9 @@ public class User {
 
 
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Document> documents;
+    @OneToMany(mappedBy = "user")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private List<Document> documents = new ArrayList<>();
 
 
     @OneToMany(mappedBy = "user")

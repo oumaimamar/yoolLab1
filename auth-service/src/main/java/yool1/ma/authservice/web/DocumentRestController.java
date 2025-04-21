@@ -11,6 +11,8 @@ import yool1.ma.authservice.entities.Document;
 import yool1.ma.authservice.repository.DocumentRepository;
 import yool1.ma.authservice.services.DocumentService;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,10 +36,10 @@ public class DocumentRestController {
 
     //---------------------Add DOCUMENT --------------------
     @PostMapping("/document/uploadDocument")
-    public ResponseEntity<Map<String, Object>> addDocument(
-            @Valid @ModelAttribute DocumentDto documentDto,
-            BindingResult result) {
-        return documentService.addDocument(documentDto, result) ;
+    public ResponseEntity<?> addDocument(@Valid @ModelAttribute DocumentDto documentDto,
+                                         BindingResult bindingResult) throws IOException {
+        Map<String, Object> response = new HashMap<>();
+        return documentService.addDocumentToUser(documentDto, bindingResult, response);
     }
 
 //    ---------------------Add DOCUMENT --------------------

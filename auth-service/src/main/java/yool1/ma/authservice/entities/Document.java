@@ -9,10 +9,7 @@ import yool1.ma.authservice.Enum.TypeDoc;
 import java.util.Date;
 
 @Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Table(name = "documents")
+@Data @NoArgsConstructor @AllArgsConstructor
 public class Document {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,7 +18,7 @@ public class Document {
     private Date dateAjout;
     private String fileName;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
 }
