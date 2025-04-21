@@ -45,7 +45,7 @@ public class DocumentService {
 
     //---------------------Add DOCUMENT --------------------
     public ResponseEntity<Map<String, Object>> addDocument(DocumentDto documentDto,
-            BindingResult result) {
+                                                           BindingResult result) {
 
         Map<String, Object> response = new HashMap<>();
 

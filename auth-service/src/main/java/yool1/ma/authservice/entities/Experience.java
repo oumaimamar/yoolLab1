@@ -1,5 +1,6 @@
 package yool1.ma.authservice.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,17 +13,24 @@ import java.util.Date;
 @Entity
 @Data  @AllArgsConstructor @NoArgsConstructor
 public class Experience {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String post;
-    private TypeEmploi typeEmploi;
-    private String entreprise;
 
+    private String post;
+
+    @Enumerated(EnumType.STRING)
+    private TypeEmploi typeEmploi;
+
+    private String entreprise;
     private Date dateDebut;
     private Date dateFin;
-    private Ville ville;
-    private String description;
 
-    @ManyToOne
+    @Enumerated(EnumType.STRING)
+    private Ville ville;
+
+    private String description;
+    @ManyToOne @JoinColumn(name = "user_id")
+    @JsonIgnore  // Add this to break the cycle
     private User user;
 }
