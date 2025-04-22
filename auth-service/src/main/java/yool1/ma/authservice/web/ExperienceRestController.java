@@ -22,26 +22,28 @@ public class ExperienceRestController {
     private ExperienceRepository experienceRepository;
 
 
-
+    //---------------------List Experience --------------------
     @GetMapping(path = "AllExperiences")
     public List<Experience> getAllExperiences() {
         return experienceRepository.findAll();
     }
 
 
-
-    @GetMapping("/user/{userId}")
+    //---------------------List Experience By userId --------------------
+    @GetMapping("/AllExperiencesByUserId/{userId}")
     public List<Experience> getExperiencesByUserId(@PathVariable Long userId) {
         return experienceRepository.findByUserId(userId);
     }
 
+    //---------------------Add Experience --------------------
     @PostMapping(path = "/AddNewExperience")
     public ResponseEntity<Experience> addExperience(@RequestBody ExperienceDto dto) {
         Experience saved = experienceService.addExperienceToUser(dto);
         return ResponseEntity.ok(saved);
     }
 
-    @DeleteMapping("/deleteExperience/{id}")
+    //---------------------Delete Experience --------------------
+    @DeleteMapping("/DeleteExperience/{id}")
     public ResponseEntity<String> deleteExperience(@PathVariable Long id) {
         try {
             experienceService.deleteExperienceById(id);

@@ -29,27 +29,30 @@ public class DocumentRestController {
     }
 
     //---------------------List DOCUMENT --------------------
-    @GetMapping(path = "/document/allDocs")
+    @GetMapping(path = "/AllDocument")
     public List<Document> AllDocuments() {
         return documentRepository.findAll();
     }
 
     //---------------------Add DOCUMENT --------------------
-    @PostMapping("/document/uploadDocument")
+    @PostMapping("/AddDocument")
     public ResponseEntity<?> addDocument(@Valid @ModelAttribute DocumentDto documentDto,
                                          BindingResult bindingResult) throws IOException {
         Map<String, Object> response = new HashMap<>();
         return documentService.addDocumentToUser(documentDto, bindingResult, response);
     }
 
-//    ---------------------Add DOCUMENT --------------------
-//    @PostMapping("/users/{userId}/documents")
-//    public ResponseEntity<Map<String, Object>> uploadDocument(
-//            @PathVariable Long userId,
-//            @Valid @ModelAttribute DocumentDto documentDto,
-//            BindingResult result) {
-//        return documentService.addDocument(documentDto, userId, result);
-//    }
+    //---------------------Delete DOCUMENT --------------------
+    @DeleteMapping("/DeleteDocument/{id}")
+    public ResponseEntity<?> deleteDocument(@PathVariable Long id) {
+        Map<String, Object> response = new HashMap<>();
+        return documentService.deleteDocument(id, response);
+    }
+
+
+
+
+
 
     //---------------------download DOCUMENT --------------------
     @GetMapping("/document/downloadDocument/{id}")

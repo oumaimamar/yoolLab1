@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,10 +24,7 @@ import yool1.ma.authservice.repository.UserRepository;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,8 +45,7 @@ public class DocumentService {
 
     //---------------------Add DOCUMENT --------------------
     public ResponseEntity<?> addDocumentToUser(@Valid DocumentDto documentDto,
-                                               BindingResult result,
-                                               Map<String, Object> response) throws IOException {
+        BindingResult result, Map<String, Object> response) throws IOException {
 
         // Image/Document Required validation
         if (documentDto.getFilePath().isEmpty()) {
@@ -105,6 +102,48 @@ public class DocumentService {
         }
     }
 
+
+
+
+    //---------------------Delete DOCUMENT --------------------
+    public ResponseEntity<?> deleteDocument(Long documentId, Map<String, Object> response) {
+        try {
+            // Find the document in database
+            Document document = documentRepository.findById(documentId)
+                    .orElseThrow(() -> new RuntimeException("Document not found"));
+
+            // Delete the file from storage
+            String filePath = "public/Doc/" + document.getFileName();
+            Path path = Paths.get(filePath);
+
+            if (Files.exists(path)) {
+                Files.delete(path);
+            }
+
+            // Remove from user's documents list (optional but cleaner)
+            document.getUser().getDocuments().removeIf(doc -> doc.getId().equals(documentId));
+
+            // Delete from database
+            documentRepository.delete(document);
+
+            response.put("status", "success");
+            response.put("message", "Document deleted successfully");
+            return ResponseEntity.ok(response);
+
+        } catch (NoSuchFileException e) {
+            response.put("status", "error");
+            response.put("message", "File not found: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        } catch (IOException e) {
+            response.put("status", "error");
+            response.put("message", "Failed to delete file: " + e.getMessage());
+            return ResponseEntity.internalServerError().body(response);
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("message", "Error deleting document: " + e.getMessage());
+            return ResponseEntity.internalServerError().body(response);
+        }
+    }
 
 
 //    public ResponseEntity<Map<String, Object>> addDocument(
