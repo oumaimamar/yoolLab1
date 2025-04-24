@@ -31,7 +31,7 @@ public class CertificationService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Certification certification = new Certification();
-        certification.setTitre(dto.getTitle());
+        certification.setTitre(dto.getTitre());
         certification.setOrganisation(dto.getOrganisation());
         certification.setDateDebut(dto.getDateDebut());
         certification.setDateFin(dto.getDateFin());

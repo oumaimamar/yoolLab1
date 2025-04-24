@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Data
 public class CertificationDTO {
-    private String title;
+    private String titre;
     private String organisation;
     private Date dateDebut;
     private Date dateFin;
